@@ -49,9 +49,6 @@
     <Filter Include="头文件\application\python">
       <UniqueIdentifier>{2196ac66-8f37-4f27-9bb9-49f099969397}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\application\driver\product">
-      <UniqueIdentifier>{5d84123b-42b1-4a3d-ab85-519ff7c39172}</UniqueIdentifier>
-    </Filter>
     <Filter Include="头文件\application\lc\inc">
       <UniqueIdentifier>{bf824816-3896-4a66-a6f5-e2d1af88968c}</UniqueIdentifier>
     </Filter>
@@ -232,6 +229,12 @@
     <Filter Include="头文件\extension\security\openssl">
       <UniqueIdentifier>{35c2db71-db7b-4147-84e7-87f668c8c1ca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\application\driver\H002">
+      <UniqueIdentifier>{5f6ffd9f-29f0-422b-9953-215eadc30df3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\application\driver\ICBC_MT">
+      <UniqueIdentifier>{37c966fc-b08e-4db1-8bd9-8aa0b8f5b223}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Test.cpp">
@@ -389,9 +392,6 @@
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\CommonCmdDriver.h">
       <Filter>头文件\application\driver</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\H002CmdDriver.h">
-      <Filter>头文件\application\driver</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\ICCardCmdDriver.h">
       <Filter>头文件\application\driver</Filter>
     </ClInclude>
@@ -406,12 +406,6 @@
     </ClInclude>
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\PSBC_PinCmdDriver.h">
       <Filter>头文件\application\driver</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\product\AndroidH002Driver.h">
-      <Filter>头文件\application\driver\product</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\product\WinH002Driver.h">
-      <Filter>头文件\application\driver\product</Filter>
     </ClInclude>
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\finger\FingerDevAdapter.h">
       <Filter>头文件\application\finger</Filter>
@@ -1013,12 +1007,6 @@
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\printer\ICBC_XmlPrinter.h">
       <Filter>头文件\application\printer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\product\JniH002Driver.h">
-      <Filter>头文件\application\driver\product</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\ICBC_MT_CmdDriver.h">
-      <Filter>头文件\application\driver</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\MagneticCmdDriver.h">
       <Filter>头文件\application\driver</Filter>
     </ClInclude>
@@ -1066,6 +1054,24 @@
     </ClInclude>
     <ClInclude Include="..\..\libzhouyb\zhou_yb\extension\special\AutoAdapter.h">
       <Filter>头文件\extension\special</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\H002\AndroidH002Driver.h">
+      <Filter>头文件\application\driver\H002</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\H002\H002CmdDriver.h">
+      <Filter>头文件\application\driver\H002</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\H002\WinH002Driver.h">
+      <Filter>头文件\application\driver\H002</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\ICBC_MT\ICBC_MT_CmdDriver.h">
+      <Filter>头文件\application\driver\ICBC_MT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\JniCmdDriver.h">
+      <Filter>头文件\application\driver</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\ICBC_MT\WE_FingerCmdDriver.h">
+      <Filter>头文件\application\driver\ICBC_MT</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

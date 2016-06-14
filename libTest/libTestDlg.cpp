@@ -19,9 +19,8 @@
 #include <application/driver/CommandDriver.h>
 #include <application/driver/CommandDriver.cpp>
 
-#include <application/driver/ICBC_MT_CmdDriver.h>
 using namespace zhou_yb::application::driver;
-
+/*
 class ICBC_Test : public CommandDriver<SplitArgParser>
 {
 protected:
@@ -73,7 +72,7 @@ public:
         return true;
     }
 };
-
+*/
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -85,7 +84,7 @@ FileLogger _fileLogger;
 LoggerAdapter _devlog;
 LoggerAdapter _log;
 
-ICBC_Test _icbc_mt;
+//ICBC_Test _icbc_mt;
 
 ClibTestDlg::ClibTestDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_LIBTEST_DIALOG, pParent)
@@ -124,7 +123,7 @@ BOOL ClibTestDlg::OnInitDialog()
     _log.Select(_devlog);
     _log.Select(_hWndLogger);
 
-    _icbc_mt.SelectLogger(_devlog);
+    //_icbc_mt.SelectLogger(_devlog);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -171,6 +170,23 @@ void ClibTestDlg::OnBnClickedButtonTest()
     _fileLogger.Open(WinHelper::GetSystemPath());
     // Test
     {
+        int a = 0;
+        string sNum = ArgConvert::ToString<pointer>(&a);
+
+        ByteBuilder tmp(8);
+        ByteConvert::FromAscii("004FEA98", tmp);
+        uint id = 0;
+        for(int i = 1;i <= tmp.GetLength(); ++i)
+        {
+            int n = tmp[i - 1];
+            n <<= (tmp.GetLength() - i) * BIT_OFFSET;
+            id += n;
+        }
+        _log << "id:" << _hex(id) << endl;
+        pointer p = ArgConvert::FromString<pointer>(sNum);
+
+        _log << &a << ' ' << sNum << ' ' << p << endl;
+        /*
         LOG_FUNC_NAME();
         CString str;
         GetDlgItemText(IDC_EDIT_INPUT, str);
@@ -188,6 +204,7 @@ void ClibTestDlg::OnBnClickedButtonTest()
             _log << "True" << endl;
         }
         _log.WriteLine(recv.GetString());
+        */
     }
     _fileLogger.Close();
 }
