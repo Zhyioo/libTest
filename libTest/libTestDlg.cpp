@@ -7,76 +7,15 @@
 #include "libTestDlg.h"
 #include "afxdialogex.h"
 
-#define OPEN_LOGGER
-#define NO_INCLUDE_JNI_SOURCE
-#define NO_INCLUDE_OPENSSL_SOURCE
-
-#include <zhouyb_lib.h>
 #include <zhouyb_src.h>
 
+#include <application/driver/ICBC_MT/WinICBC_MT_Driver.h>
 #include <application/pboc/pboc_app.cpp>
-
-#include <application/driver/CommandDriver.h>
-#include <application/driver/CommonCmdDriver.h>
+#include <application/lc/lc_src.h>
 #include <application/driver/CommandDriver.cpp>
-
-#include <application/driver/ICBC_MT/ICBC_MT_CmdDriver.h>
-#include <xml/xml_src.h>
 #include <application/printer/ICBC_XmlPrinter.cpp>
+#include <xml/xml_src.h>
 
-using namespace zhou_yb::application::driver;
-
-class ICBC_Test : public CommandDriver<SplitArgParser>
-{
-protected:
-    LoggerInvoker _logInvoker;
-    LastErrInvoker _objErr;
-    LastErrExtractor _lastErr;
-
-    HidDevice _dev;
-    HidCmdAdapter<HidDevice, 0, 1> _hidCmdAdapter;
-
-    ICBC_MT_CmdDriver<SplitArgParser> _icbc;
-public:
-    ICBC_Test()
-    {
-        _objErr.Invoke(_lasterr, _errinfo);
-        _lastErr.IsFormatMSG = false;
-        _lastErr.IsLayerMSG = true;
-        _lastErr.Select(_dev, "DEV");
-        _lastErr.Select(_icbc, "APP");
-        _lastErr.Select(_objErr, "MT");
-
-        _logInvoker.select(_dev);
-        _logInvoker.select(_icbc);
-
-        list<Ref<ComplexCommand> > cmds = _icbc.GetCommand("");
-        Registe(cmds);
-
-        _Registe("EnumCommand", (*this), &ICBC_Test::EnumCommand);
-        _Registe("OnCommand", (*this), &ICBC_Test::OnCommand);
-        _Registe("LastError", (*this), &ICBC_Test::LastError);
-
-        _Registe("Open", (*this), &ICBC_Test::Open);
-        _Registe("Close", (*this), &ICBC_Test::Close);
-
-        _hidCmdAdapter.SelectDevice(_dev);
-        _icbc.SelectDevice(_hidCmdAdapter);
-    }
-    LC_CMD_LASTERR(_lastErr);
-    LC_CMD_LOGGER(_logInvoker);
-    LC_CMD_METHOD(Open)
-    {
-        HidDeviceHelper::OpenDevice<HidDevice>(_dev, "BP8903-H002");
-        _dev.SetWaitTimeout(1000);
-        return true;
-    }
-    LC_CMD_METHOD(Close)
-    {
-        _dev.Close();
-        return true;
-    }
-};
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -89,7 +28,7 @@ FileLogger _fileLogger;
 LoggerAdapter _devlog;
 LoggerAdapter _log;
 
-ICBC_Test _icbc_mt;
+WinICBC_MT_Driver<ArgParser> _h002;
 
 ClibTestDlg::ClibTestDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_LIBTEST_DIALOG, pParent)
@@ -99,15 +38,27 @@ ClibTestDlg::ClibTestDlg(CWnd* pParent /*=NULL*/)
 
 void ClibTestDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialogEx::DoDataExchange(pDX);
+    CDialogEx::DoDataExchange(pDX);
+    DDX_Control(pDX, IDC_LIST_CMD, m_CmdList);
+    DDX_Control(pDX, IDC_LIST_ARG, m_ArgList);
 }
 
 BEGIN_MESSAGE_MAP(ClibTestDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-    ON_BN_CLICKED(IDC_BUTTON_TEST, &ClibTestDlg::OnBnClickedButtonTest)
     ON_BN_CLICKED(IDC_BUTTON_CLEAR, &ClibTestDlg::OnBnClickedButtonClear)
     ON_BN_CLICKED(IDC_BUTTON_EXIT, &ClibTestDlg::OnBnClickedButtonExit)
+	ON_BN_CLICKED(IDC_BUTTON_ADDCMD, &ClibTestDlg::OnBnClickedButtonAddcmd)
+	ON_BN_CLICKED(IDC_BUTTON_REMOVECMD, &ClibTestDlg::OnBnClickedButtonRemovecmd)
+	ON_BN_CLICKED(IDC_BUTTON_ADD, &ClibTestDlg::OnBnClickedButtonAdd)
+	ON_BN_CLICKED(IDC_BUTTON_REMOVE, &ClibTestDlg::OnBnClickedButtonRemove)
+	ON_BN_CLICKED(IDC_BUTTON_SET, &ClibTestDlg::OnBnClickedButtonSet)
+	ON_BN_CLICKED(IDC_BUTTON_OPEN, &ClibTestDlg::OnBnClickedButtonOpen)
+	ON_BN_CLICKED(IDC_BUTTON_SCAN, &ClibTestDlg::OnBnClickedButtonScan)
+	ON_BN_CLICKED(IDC_BUTTON_CALL, &ClibTestDlg::OnBnClickedButtonCall)
+    ON_LBN_SELCHANGE(IDC_LIST_CMD, &ClibTestDlg::OnLbnSelchangeListCmd)
+    ON_LBN_SELCHANGE(IDC_LIST_ARG, &ClibTestDlg::OnLbnSelchangeListArg)
+    ON_LBN_DBLCLK(IDC_LIST_CMD, &ClibTestDlg::OnLbnDblclkListCmd)
 END_MESSAGE_MAP()
 
 
@@ -123,12 +74,12 @@ BOOL ClibTestDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
-    _hWndLogger.Open(GetDlgItem(IDC_EDIT_OUTPUT)->m_hWnd);
+    _hWndLogger.Open(GetDlgItem(IDC_EDIT_LOGGER)->m_hWnd);
     _devlog.Select(_fileLogger);
     _log.Select(_devlog);
     _log.Select(_hWndLogger);
 
-    _icbc_mt.SelectLogger(_devlog);
+    _h002.SelectLogger(_devlog);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -169,42 +120,197 @@ HCURSOR ClibTestDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-void ClibTestDlg::OnBnClickedButtonTest()
+BOOL ClibTestDlg::_LoadFromIni(const char* path)
 {
-    // TODO: 在此添加控件通知处理程序代码
-    _fileLogger.Open(WinHelper::GetSystemPath());
-    // Test
+    IniFile ini;
+    list<string> files;
+    WinHelper::EnumFiles(".\\", &files, NULL, "*.ini");
+    if(files.size() < 1)
+        return false;
+
+    if(!ini.Open(files.front().c_str()))
+        return false;
+
+    IniFile::iterator itr;
+    IniGroup::iterator itemItr;
+    for(itr = ini.begin();itr != ini.end(); ++itr)
     {
-        LOG_FUNC_NAME();
-        CString str;
-        GetDlgItemText(IDC_EDIT_INPUT, str);
-
-        ByteBuilder recv(64);
-        if(!_icbc_mt.TransmitCommand("OnCommand", str.GetString(), recv))
+        if(StringConvert::Compare(itr->Name.c_str(), "Cmd", true))
         {
-            recv.Clear();
-            _icbc_mt.TransmitCommand("OnCommand", "LastError", recv);
+            m_CmdConllection.push_back();
+            string name = (*itr)["Name"].Value;
+            string cmd = (*itr)["Cmd"].Value;
+            if(name.length() < 1)
+                name = cmd;
+            m_CmdConllection.back().Name = name;
+            m_CmdConllection.back().Cmd = cmd;
+            ArgParser arg;
+            arg.Parse((*itr)["Arg"].Value.c_str());
 
-            _log << "False" << endl;
+            string key;
+            string val;
+
+            while(arg.EnumValue(&val, &key))
+            {
+                m_CmdConllection.back().Arg.PushValue(key, val);
+            }
         }
-        else
-        {
-            _log << "True" << endl;
-        }
-        _log.WriteLine(recv.GetString());
-        
     }
-    _fileLogger.Close();
+    _LoadCollection(m_CmdConllection);
+    return true;
+}
+
+void ClibTestDlg::_LoadCmd(const char* cmdName)
+{
+    m_CmdList.AddString(cmdName);
+    // 选择当前项
+    if(m_CmdList.GetCount() < 2)
+        m_CmdList.SetCurSel(0);
+}
+
+void ClibTestDlg::_LoadCollection(const list<CmdInvoker>& collection)
+{
+    list<CmdInvoker>::const_iterator itr;
+    for(itr = collection.begin();itr != collection.end(); ++itr)
+    {
+        _LoadCmd(itr->Name.c_str());
+    }
+}
+
+void ClibTestDlg::OnBnClickedButtonCall()
+{
+	// TODO: 在此添加控件通知处理程序代码
+    int index = m_CmdList.GetCurSel();
+    if(index < 0)
+        return;
+    list<CmdInvoker>::iterator itr = list_helper<CmdInvoker>::index_of(m_CmdConllection, index);
+    if(itr == m_CmdConllection.end())
+        return;
+    ByteBuilder recv(32);
+    ByteBuilder arg(32);
+    ArgParser::ToString(itr->Arg, arg);
+
+    _log << "---" << itr->Cmd << "---" << endl;
+    _log.WriteLine("ARG:");
+    _log.WriteLine(arg.GetString());
+
+    if(!_h002.TransmitCommand(itr->Cmd.c_str(), arg, recv))
+    {
+        _log.WriteLine("False");
+        return;
+    }
+    _log.WriteLine("True:");
+    _log.WriteLine(recv.GetString());
 }
 
 void ClibTestDlg::OnBnClickedButtonClear()
 {
     // TODO: 在此添加控件通知处理程序代码
-    SetDlgItemText(IDC_EDIT_OUTPUT, _T(""));
+    SetDlgItemText(IDC_EDIT_LOGGER, _T(""));
 }
 
 void ClibTestDlg::OnBnClickedButtonExit()
 {
     // TODO: 在此添加控件通知处理程序代码
     OnOK();
+}
+
+void ClibTestDlg::OnBnClickedButtonAddcmd()
+{
+	// TODO: 在此添加控件通知处理程序代码
+}
+
+void ClibTestDlg::OnBnClickedButtonRemovecmd()
+{
+	// TODO: 在此添加控件通知处理程序代码
+}
+
+void ClibTestDlg::OnBnClickedButtonAdd()
+{
+	// TODO: 在此添加控件通知处理程序代码
+}
+
+void ClibTestDlg::OnBnClickedButtonRemove()
+{
+	// TODO: 在此添加控件通知处理程序代码
+}
+
+void ClibTestDlg::OnBnClickedButtonSet()
+{
+	// TODO: 在此添加控件通知处理程序代码
+}
+
+void ClibTestDlg::OnBnClickedButtonOpen()
+{
+	// TODO: 在此添加控件通知处理程序代码
+    // 自动显示当前目录下的第一个ini文件
+    m_CmdList.ResetContent();
+    m_CmdConllection.clear();
+
+    _LoadFromIni("");
+}
+
+void ClibTestDlg::OnBnClickedButtonScan()
+{
+	// TODO: 在此添加控件通知处理程序代码
+}
+
+void ClibTestDlg::OnLbnSelchangeListCmd()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    int index = m_CmdList.GetCurSel();
+    if(index < 0)
+        return;
+    list<CmdInvoker>::iterator itr = list_helper<CmdInvoker>::index_of(m_CmdConllection, index);
+    if(itr == m_CmdConllection.end())
+        return;
+    SetDlgItemText(IDC_EDIT_KEY, "");
+    SetDlgItemText(IDC_EDIT_VALUE, "");
+    m_ArgList.ResetContent();
+
+    string key;
+    string val;
+    while(itr->Arg.EnumValue(&val, &key))
+    {
+        m_ArgList.AddString(key.c_str());
+    }
+    itr->Arg.EnumValue(NULL, NULL);
+    m_ArgList.SetCurSel(0);
+    OnLbnSelchangeListArg();
+}
+
+void ClibTestDlg::OnLbnSelchangeListArg()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    int index = m_CmdList.GetCurSel();
+    if(index < 0)
+        return;
+    list<CmdInvoker>::iterator itr = list_helper<CmdInvoker>::index_of(m_CmdConllection, index);
+    if(itr == m_CmdConllection.end())
+        return;
+
+    index = m_ArgList.GetCurSel();
+    if(index < 0)
+        return;
+
+    string key;
+    string val;
+    int i = 0;
+    while(itr->Arg.EnumValue(&val, &key))
+    {
+        if(index == i)
+        {
+            SetDlgItemText(IDC_EDIT_KEY, key.c_str());
+            SetDlgItemText(IDC_EDIT_VALUE, val.c_str());
+            break;
+        }
+        ++i;
+    }
+    itr->Arg.EnumValue(NULL, NULL);
+}
+
+void ClibTestDlg::OnLbnDblclkListCmd()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    OnBnClickedButtonCall();
 }

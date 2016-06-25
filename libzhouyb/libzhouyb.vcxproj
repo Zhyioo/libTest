@@ -26,13 +26,13 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -201,16 +201,20 @@
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\CommonCmdDriver.h" />
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\H002\AndroidH002Driver.h" />
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\H002\H002CmdDriver.h" />
+    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\H002\H002CmdDriver_src.h" />
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\H002\WinH002Driver.h" />
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\ICBC_MT\ICBC_MT_CmdDriver.h" />
+    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\ICBC_MT\ICBC_MT_CmdDriver_src.h" />
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\ICBC_MT\WE_FingerCmdDriver.h" />
+    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\ICBC_MT\WinICBC_MT_Driver.h" />
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\ICCardCmdDriver.h" />
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\IDCardCmdDriver.h" />
-    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\JniCmdDriver.h" />
+    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\JniDriver.h" />
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\LC_CmdDriver.h" />
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\MagneticCmdDriver.h" />
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\PBOC_CmdDriver.h" />
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\PSBC_PinCmdDriver.h" />
+    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\WinDriver.h" />
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\finger\FingerDevAdapter.h" />
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\iccard\BOC_ComICCardDevAdapter.h" />
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\iccard\DllICCardDeviceAdapter.h" />

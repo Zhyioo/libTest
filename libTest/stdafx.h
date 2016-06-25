@@ -20,7 +20,11 @@
 #include <afxext.h>         // MFC À©Õ¹
 
 
+#define NTDDI_VERSION NTDDI_VISTASP1
 
+#ifdef VISTA_KB942567
+#undef VISTA_KB942567
+#endif
 
 
 #ifndef _AFX_NO_OLE_SUPPORT
@@ -34,9 +38,6 @@
 
 
 #include <afxsock.h>            // MFC Ì×½Ó×ÖÀ©Õ¹
-
-
-
 
 
 

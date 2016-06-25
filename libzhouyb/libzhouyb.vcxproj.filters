@@ -237,9 +237,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Test.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\libzhouyb\zhou_yb\application\driver\CommandDriver.cpp">
       <Filter>头文件\application\driver</Filter>
     </ClCompile>
@@ -368,6 +365,9 @@
     </ClCompile>
     <ClCompile Include="..\..\libzhouyb\zhou_yb\application\printer\ICBC_XmlPrinter.cpp">
       <Filter>头文件\application\printer</Filter>
+    </ClCompile>
+    <ClCompile Include="Test.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1067,11 +1067,23 @@
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\ICBC_MT\ICBC_MT_CmdDriver.h">
       <Filter>头文件\application\driver\ICBC_MT</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\JniCmdDriver.h">
-      <Filter>头文件\application\driver</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\ICBC_MT\WE_FingerCmdDriver.h">
       <Filter>头文件\application\driver\ICBC_MT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\ICBC_MT\WinICBC_MT_Driver.h">
+      <Filter>头文件\application\driver\ICBC_MT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\ICBC_MT\ICBC_MT_CmdDriver_src.h">
+      <Filter>头文件\application\driver\ICBC_MT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\H002\H002CmdDriver_src.h">
+      <Filter>头文件\application\driver\H002</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\JniDriver.h">
+      <Filter>头文件\application\driver</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\WinDriver.h">
+      <Filter>头文件\application\driver</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
