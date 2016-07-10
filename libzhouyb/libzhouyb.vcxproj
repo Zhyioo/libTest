@@ -263,6 +263,7 @@
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\test_frame\linker\WinHidTestLinker.h" />
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\test_frame\TestFrame.h" />
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\tools\Detector.h" />
+    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\tools\ICmdDriver.h" />
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\tools\IconvAppConvert.h" />
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\tools\IConverter.h" />
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\tools\IJniCmdDriver.h" />

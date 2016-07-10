@@ -15,6 +15,8 @@
 #include <application/driver/CommonCmdDriver.h>
 using namespace zhou_yb::application::driver;
 
+#include <application/tools/IConverter.h>
+
 struct CmdInvoker
 {
     string Name;
@@ -41,6 +43,7 @@ public:
 // й╣ож
 protected:
 	HICON m_hIcon;
+    ConverterInvoker _cmdDriver;
     list<CmdInvoker> m_CmdConllection;
 
     BOOL _LoadFromIni(const char* path);
@@ -70,4 +73,5 @@ public:
     afx_msg void OnLbnSelchangeListCmd();
     afx_msg void OnLbnSelchangeListArg();
     afx_msg void OnLbnDblclkListCmd();
+    afx_msg void OnBnClickedButtonSetcmd();
 };

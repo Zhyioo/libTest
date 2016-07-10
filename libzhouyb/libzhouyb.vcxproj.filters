@@ -1085,6 +1085,9 @@
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\WinDriver.h">
       <Filter>头文件\application\driver</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\tools\ICmdDriver.h">
+      <Filter>头文件\application\tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\libzhouyb\zhou_yb\json\jsoncpp\json_internalarray.inl">

@@ -9,13 +9,6 @@
 
 #include <zhouyb_src.h>
 
-#include <application/driver/ICBC_MT/WinICBC_MT_Driver.h>
-#include <application/pboc/pboc_app.cpp>
-#include <application/lc/lc_src.h>
-#include <application/driver/CommandDriver.cpp>
-#include <application/printer/ICBC_XmlPrinter.cpp>
-#include <xml/xml_src.h>
-
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -27,8 +20,6 @@ HwndLogger _hWndLogger;
 FileLogger _fileLogger;
 LoggerAdapter _devlog;
 LoggerAdapter _log;
-
-WinICBC_MT_Driver<ArgParser> _h002;
 
 ClibTestDlg::ClibTestDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_LIBTEST_DIALOG, pParent)
@@ -59,6 +50,7 @@ BEGIN_MESSAGE_MAP(ClibTestDlg, CDialogEx)
     ON_LBN_SELCHANGE(IDC_LIST_CMD, &ClibTestDlg::OnLbnSelchangeListCmd)
     ON_LBN_SELCHANGE(IDC_LIST_ARG, &ClibTestDlg::OnLbnSelchangeListArg)
     ON_LBN_DBLCLK(IDC_LIST_CMD, &ClibTestDlg::OnLbnDblclkListCmd)
+    ON_BN_CLICKED(IDC_BUTTON_SETCMD, &ClibTestDlg::OnBnClickedButtonSetcmd)
 END_MESSAGE_MAP()
 
 
@@ -78,8 +70,6 @@ BOOL ClibTestDlg::OnInitDialog()
     _devlog.Select(_fileLogger);
     _log.Select(_devlog);
     _log.Select(_hWndLogger);
-
-    _h002.SelectLogger(_devlog);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -194,11 +184,6 @@ void ClibTestDlg::OnBnClickedButtonCall()
     _log.WriteLine("ARG:");
     _log.WriteLine(arg.GetString());
 
-    if(!_h002.TransmitCommand(itr->Cmd.c_str(), arg, recv))
-    {
-        _log.WriteLine("False");
-        return;
-    }
     _log.WriteLine("True:");
     _log.WriteLine(recv.GetString());
 }
@@ -218,11 +203,30 @@ void ClibTestDlg::OnBnClickedButtonExit()
 void ClibTestDlg::OnBnClickedButtonAddcmd()
 {
 	// TODO: 在此添加控件通知处理程序代码
+    CString strName;
+    CString strCmd;
+    GetDlgItemText(IDC_EDIT_CMDNAME, strName);
+    GetDlgItemText(IDC_EDIT_COMMAND, strCmd);
+
+    if(strCmd.GetLength() < 1)
+        return;
+    if(strName.GetLength() < 1)
+        strName = strCmd;
+
+    m_CmdConllection.push_back();
+    m_CmdConllection.back().Name = strName.GetBuffer();
+    m_CmdConllection.back().Cmd = strCmd.GetBuffer();
+
+    m_CmdList.AddString(strName);
 }
 
 void ClibTestDlg::OnBnClickedButtonRemovecmd()
 {
 	// TODO: 在此添加控件通知处理程序代码
+    int index = m_CmdList.GetCurSel();
+    if(index < 0)
+        return;
+    list_helper<CmdInvoker>::erase_at(m_CmdConllection, index);
 }
 
 void ClibTestDlg::OnBnClickedButtonAdd()
@@ -313,4 +317,28 @@ void ClibTestDlg::OnLbnDblclkListCmd()
 {
     // TODO: 在此添加控件通知处理程序代码
     OnBnClickedButtonCall();
+}
+
+void ClibTestDlg::OnBnClickedButtonSetcmd()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    int index = m_CmdList.GetCurSel();
+    if(index < 0)
+        return;
+    list<CmdInvoker>::iterator itr = list_helper<CmdInvoker>::index_of(m_CmdConllection, index);
+    if(itr == m_CmdConllection.end())
+        return;
+    CString strName;
+    CString strCmd;
+    GetDlgItemText(IDC_EDIT_CMDNAME, strName);
+    GetDlgItemText(IDC_EDIT_COMMAND, strCmd);
+
+    if(strCmd.GetLength() < 1)
+        return;
+    if(strName.GetLength() < 1)
+        strName = strCmd;
+    itr->Cmd = strCmd.GetBuffer();
+    itr->Name = strName.GetBuffer();
+
+    OnLbnSelchangeListCmd();
 }
