@@ -407,9 +407,6 @@
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\PSBC_PinCmdDriver.h">
       <Filter>头文件\application\driver</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\finger\FingerDevAdapter.h">
-      <Filter>头文件\application\finger</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\iccard\BOC_ComICCardDevAdapter.h">
       <Filter>头文件\application\iccard</Filter>
     </ClInclude>
@@ -1087,6 +1084,15 @@
     </ClInclude>
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\tools\ICmdDriver.h">
       <Filter>头文件\application\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\pinpad\H002PinPadDevAdapter.h">
+      <Filter>头文件\application\pinpad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\finger\WE_FingerDevAdapter.h">
+      <Filter>头文件\application\finger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\finger\ZZ_FingerDevAdapter.h">
+      <Filter>头文件\application\finger</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

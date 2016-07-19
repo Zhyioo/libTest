@@ -215,7 +215,8 @@
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\PBOC_CmdDriver.h" />
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\PSBC_PinCmdDriver.h" />
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\driver\WinDriver.h" />
-    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\finger\FingerDevAdapter.h" />
+    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\finger\WE_FingerDevAdapter.h" />
+    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\finger\ZZ_FingerDevAdapter.h" />
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\iccard\BOC_ComICCardDevAdapter.h" />
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\iccard\DllICCardDeviceAdapter.h" />
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\iccard\SmartCardReader.h" />
@@ -234,6 +235,7 @@
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\lc\lc_src.h" />
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\magnetic\HidMagCmdAdapter.h" />
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\pboc\pboc_app.h" />
+    <ClInclude Include="..\..\libzhouyb\zhou_yb\application\pinpad\H002PinPadDevAdapter.h" />
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\pinpad\ICBC_PinPadDevAdapter.h" />
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\pinpad\PSBC_PinPadDevAdapter.h" />
     <ClInclude Include="..\..\libzhouyb\zhou_yb\application\printer\ICBC_PrinterCmdAdapter.h" />
